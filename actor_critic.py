@@ -7,28 +7,22 @@ class ActorCritic(nn.Module):
     def __init__(self, output_dim=3):
         super().__init__()
 
-        self.conv = nn.Sequential(
-            nn.Conv2d(4, 16, kernel_size=8, stride=4),  # 84x84 - 20x20
+        self.feature_extractor = nn.Sequential(
+            nn.Conv2d(4, 32, kernel_size=8, stride=4, padding=0),
             nn.ReLU(),
-            nn.Conv2d(16, 32, kernel_size=4, stride=2),  # 20x20 - 9x9
+            nn.Conv2d(32, 64, kernel_size=4, stride=2, padding=0),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=0),
             nn.ReLU(),
             nn.Flatten(),
-        )  # sharing common encoder between actor and critic
+            nn.Linear(7 * 7 * 64, 512),
+        )  # from NatureCNN
 
-        self.actor = self.get_dense_network(out_dim=output_dim)  # remove FIRE
-        self.critic = self.get_dense_network(out_dim=1)
-
-    def get_dense_network(self, out_dim):
-        return nn.Sequential(
-            nn.Linear(32 * 9 * 9, 256),
-            nn.ReLU(),
-            nn.Linear(256, 64),
-            nn.ReLU(),
-            nn.Linear(64, out_dim),
-        )
+        self.actor = nn.Linear(512, output_dim)
+        self.critic = nn.Linear(512, 1)
 
     def forward(self, x):
-        x = self.conv(x)
+        x = self.feature_extractor(x)
 
         action_logits = self.actor(x)
         dist = Categorical(logits=action_logits)
@@ -39,7 +33,7 @@ class ActorCritic(nn.Module):
         return action, action_logprob, self.critic(x)
 
     def evaluate(self, x, action):
-        x = self.conv(x)
+        x = self.feature_extractor(x)
 
         action_logits = self.actor(x)
         dist = Categorical(logits=action_logits)

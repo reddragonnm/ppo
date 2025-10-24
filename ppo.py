@@ -58,9 +58,9 @@ class PPO:
         for r, is_terminal in zip(
             reversed(self.buffer["rewards"]), reversed(self.buffer["is_terminals"])
         ):
-            if is_terminal:
-                discounted_reward = 0
-            discounted_reward = r + (self.discount_factor * discounted_reward)
+            discounted_reward = r + (
+                self.discount_factor * discounted_reward * int(1 - is_terminal)
+            )
             rewards.insert(0, discounted_reward)
 
         rewards = torch.FloatTensor(rewards).to(DEVICE)
