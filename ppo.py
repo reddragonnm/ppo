@@ -95,6 +95,8 @@ class PPO:
             loss_val.mean().backward()
             self.optimizer.step()
 
+            print("PPO loss:", loss_val.mean().item())
+
         self.policy_old.load_state_dict(self.policy.state_dict())
         self.policy_old.eval()
 
