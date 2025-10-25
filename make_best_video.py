@@ -8,6 +8,8 @@ Crisp, squashed, slow-motion Atari recorder with solid colors (no blur).
 - Uses imageio/ffmpeg if available; falls back to OpenCV
 """
 
+# ! This code is AI-generated
+
 import os
 from pathlib import Path
 import shutil
@@ -160,7 +162,7 @@ env = AtariPreprocessing(
 )
 
 policy = ActorCritic().to(DEVICE)
-model_path = Path("models/best_model.pth")
+model_path = Path("models/model_56250.pth")
 if not model_path.exists():
     raise FileNotFoundError(
         f"Model not found at {model_path}. Place trained model there."

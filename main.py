@@ -30,17 +30,17 @@ total_frames = 1_000_000_000
 max_ep_frames = 20_000
 policy_update_freq = 50
 
-ppo = PPO()
-ppo.policy.load_state_dict(torch.load("models/model_52650.pth", map_location=DEVICE))
+ppo = PPO(lr=2e-4)
+ppo.policy.load_state_dict(torch.load("models/model_56500.pth", map_location=DEVICE))
 ppo.policy_old.load_state_dict(
-    torch.load("models/model_52650.pth", map_location=DEVICE)
+    torch.load("models/model_56500.pth", map_location=DEVICE)
 )
 ppo.entropy_coeff = 0.01
 
-frame = 9694195
-num_episodes = 52651
+frame = 11175972
+num_episodes = 56551
 
-max_reward = 45.710
+max_reward = 51.56
 
 ACTION_MAP = [0, 2, 3]  # NOOP, LEFT, RIGHT
 
@@ -85,7 +85,7 @@ while True:
             f"Buffer size: {len(ppo.buffer['rewards'])} frames Mean reward: {mean_reward:.3f} Max reward: {max(ep_rewards):.3f}"
         )
 
-        ppo.entropy_coeff = max(0.01, 0.1 - (frame / 1_500_000) * 0.1)
+        # ppo.entropy_coeff = max(0.01, 0.1 - (frame / 1_500_000) * 0.1)
         ppo.update(K=K)
 
         torch.save(ppo.policy.state_dict(), f"models/model_{num_episodes}.pth")
