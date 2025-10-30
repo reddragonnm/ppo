@@ -1,5 +1,5 @@
-models/
-videos/
+models/model*
+videos/episode*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
