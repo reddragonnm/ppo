@@ -2,7 +2,7 @@
 
 This repository implements a Proximal Policy Optimization (PPO) agent to play Atari Breakout using PyTorch and Gymnasium. It includes training, evaluation, and video rendering utilities.
 
-![Breakout Gameplay](videos/best_run.mp4)
+![Breakout Gameplay](videos/best_run.gif)
 
 ## Features
 
